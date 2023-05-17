@@ -11,6 +11,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Constants from "expo-constants";
 import { useState } from "react";
+import axios from "axios";
 
 export default function SignInScreen({ setToken }) {
   const navigation = useNavigation();
@@ -33,7 +34,11 @@ export default function SignInScreen({ setToken }) {
             { email, username, password, description }
           );
           console.log(result.data);
-          alert("Votre Compte à bien été créé");
+          if (result.data.token) {
+            const userToken = result.data.token;
+            alert("Votre Compte à bien été créé");
+            setToken(userToken);
+          }
         } catch (error) {
           console.log(error.errorMessage);
           setErrorMessage(
