@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -34,6 +35,18 @@ export default function HomeScreen() {
     };
     fetchData();
   }, []);
+
+  const ratingStar = (Rating) => {
+    const tab = [];
+    for (let i = 0; i <= 5; i++) {
+      if (i <= Rating) {
+        tab.push(<AntDesign name="star" size={24} color="#FFB000" key={i} />);
+      } else {
+        tab.push(<AntDesign name="star" size={24} color="#BBBBBB" key={i} />);
+      }
+    }
+    return tab;
+  };
 
   return isLoading ? (
     <ActivityIndicator size="large" />
@@ -58,15 +71,24 @@ export default function HomeScreen() {
               >
                 <Text style={styles.price}>{data.item.price} €</Text>
               </ImageBackground>
-              <View>
-                <Text>{data.item.title}</Text>
-                <View>
-                  <Text>{data.item.reviews}</Text>
+              <View style={styles.roomDescription}>
+                <View style={styles.roomResume}>
+                  <Text style={styles.h2} numberOfLines={1}>
+                    {data.item.title}
+                  </Text>
+                  <View style={styles.ratingStar}>
+                    {ratingStar(data.item.ratingValue)}
+                    <Text style={styles.reviews}>
+                      {data.item.reviews} reviews
+                    </Text>
+                  </View>
                 </View>
-                <Image
-                  source={{ uri: data.item.user.account.photo.url }}
-                  style={styles.avatar}
-                />
+                <View>
+                  <Image
+                    source={{ uri: data.item.user.account.photo.url }}
+                    style={styles.avatar}
+                  />
+                </View>
               </View>
             </TouchableOpacity>
           );
@@ -77,7 +99,9 @@ export default function HomeScreen() {
   );
 }
 const styles = StyleSheet.create({
-  container: { padding: 10 },
+  container: {
+    paddingHorizontal: 30,
+  },
   ImgRoom: {
     width: "100%",
     height: 150,
@@ -93,12 +117,37 @@ const styles = StyleSheet.create({
   },
   separator: {
     backgroundColor: "grey",
-    height: 1,
+    height: 2,
     marginVertical: 10,
   },
   avatar: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: 50,
+  },
+  roomDescription: {
+    flexDirection: "row",
+    paddingVertical: 20,
+    alignItems: "center",
+  },
+  roomResume: {
+    width: "80%",
+    justifyContent: "space-between",
+    gap: 15,
+  },
+  h2: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  ratingStar: {
+    width: "100%",
+    flexDirection: "row",
+    paddingVertical: 5,
+    gap: 5,
+    alignItems: "center",
+  },
+  reviews: {
+    marginLeft: 10,
+    color: "grey",
   },
 });
