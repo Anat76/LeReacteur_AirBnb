@@ -59,10 +59,11 @@ export default function HomeScreen() {
           // console.log(data.item);
           // console.log(data.item.photos[0].url);
           // console.log(data.item.user.account.photo.url);
+          // console.log(data.item._id);
           return (
             <TouchableOpacity
               onPress={() => {
-                console.log("Room offer");
+                navigation.navigate("Profile", { id: data.item._id });
               }}
             >
               <ImageBackground
